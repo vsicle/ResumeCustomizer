@@ -1,0 +1,85 @@
+\documentclass[11pt]{article}
+
+% Geometry: 0.4in margins all around
+\usepackage[margin=0.4in]{geometry}
+
+% Font: Helvetica (helvet)
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Encoding and formatting
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+% Remove page numbers
+\pagestyle{empty}
+
+% Compact section formatting
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{6pt}{4pt}
+
+\begin{document}
+
+% ==============================================================================
+% HEADER
+% ==============================================================================
+\begin{center}
+    {\Huge \textbf{\VAR{basics.name | e}}}\\[4pt]
+    {\small \VAR{basics.email | e} | \VAR{basics.phone | e} | \VAR{basics.location | e}\BLOCK{if basics.website} | \href{https://\VAR{basics.website}}{\VAR{basics.website | e}}\BLOCK{endif}\BLOCK{if basics.github} | \href{https://\VAR{basics.github}}{GitHub}\BLOCK{endif}}
+\end{center}
+
+\vspace{-8pt}
+
+% ==============================================================================
+% EDUCATION
+% ==============================================================================
+\section*{Education}
+\noindent \textbf{\VAR{basics.education.institution | e}} \hfill \VAR{basics.location | e}\\
+\noindent \VAR{basics.education.area | e}\BLOCK{if basics.education.score} | \VAR{basics.education.score | e}\BLOCK{endif} \hfill \VAR{basics.education.endDate | e}\\
+\BLOCK{if basics.education.courses}
+\noindent {\small \textit{Relevant Courses:} \VAR{basics.education.courses | map(attribute='name') | map('e') | join(', ')}}
+\BLOCK{endif}
+
+% ==============================================================================
+% SKILLS
+% ==============================================================================
+\section*{Skills}
+\noindent{\small
+\BLOCK{if skills.languages}\textbf{Languages:} \VAR{skills.languages | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
+\BLOCK{if skills.tools}\textbf{Tools:} \VAR{skills.tools | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
+\BLOCK{if skills.concepts}\textbf{Concepts:} \VAR{skills.concepts | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
+\BLOCK{if skills.frameworks}\textbf{Frameworks:} \VAR{skills.frameworks | map('e') | join(', ')}\BLOCK{endif}
+}
+
+% ==============================================================================
+% EXPERIENCE
+% ==============================================================================
+\section*{Experience}
+\BLOCK{for job in selected_work}
+\noindent \textbf{\VAR{job.position | e}} | \VAR{job.name | e} \hfill \VAR{job.startDate | e} -- \VAR{job.endDate | e}
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.5em]
+\BLOCK{for bullet in job.highlights}
+    \item \VAR{bullet | e}
+\BLOCK{endfor}
+\end{itemize}
+\BLOCK{if not loop.last}\vspace{2pt}\BLOCK{endif}
+\BLOCK{endfor}
+
+% ==============================================================================
+% PROJECTS
+% ==============================================================================
+\section*{Projects}
+\BLOCK{for project in selected_projects}
+\noindent \textbf{\VAR{project.name | e}} \hfill \VAR{project.startDate | e}\BLOCK{if project.endDate} -- \VAR{project.endDate | e}\BLOCK{endif}
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.5em]
+\BLOCK{for bullet in project.highlights}
+    \item \VAR{bullet | e}
+\BLOCK{endfor}
+\end{itemize}
+\BLOCK{if not loop.last}\vspace{2pt}\BLOCK{endif}
+\BLOCK{endfor}
+
+\end{document}
