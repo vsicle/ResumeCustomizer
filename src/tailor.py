@@ -84,13 +84,20 @@ Create a targeted resume that fills exactly ONE PAGE. You must balance quantity 
 - You may slightly rephrase skill names to match JD terminology (e.g., "Next.js" → "NextJS" if JD uses that form)
 - Keep all skills provided in the input (user has confirmed they possess them)
 
-**BULLET POINT REWRITING (be aggressive but truthful):**
+**BULLET POINT REWRITING - WORK EXPERIENCE (be aggressive but truthful):**
 - Reframe each bullet to emphasize skills/technologies mentioned in the JD
 - Mirror the JD's language and terminology where the experience genuinely applies
 - Lead with strong action verbs; quantify results wherever possible
-- Highlight transferable skills that connect to JD requirements
 - Maximum 200 characters per bullet
 - Remove any [cite: XXX] markers
+
+**BULLET POINT REWRITING - PROJECTS (be aggressive but truthful):**
+- REWRITE every project bullet to directly connect to JD requirements
+- Emphasize technologies, methodologies, and outcomes that match what the JD is looking for
+- Frame personal/academic projects as professional-grade work with impact
+- Use JD keywords naturally (e.g., if JD mentions "LLMs", highlight any AI/ML work prominently)
+- Show initiative, problem-solving, and shipping ability
+- Maximum 200 characters per bullet
 
 **INTEGRITY RULES (never break these):**
 - NEVER invent experiences, metrics, or technologies not implied by the original
