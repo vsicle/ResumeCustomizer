@@ -6,9 +6,49 @@
 2. **Paste the job description** into `data/job_description.txt`
 3. **Run the builder**:
    ```bash
+   build.bat
+   ```
+   Or directly:
+   ```bash
    python src/builder.py
    ```
-4. **Find your resume** at `output/resume.pdf`
+4. **Review** the tailored content when prompted
+5. **Find your resume** at `output/resume.pdf`
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `build.bat` | Run with AI tailoring (default) |
+| `build.bat --no-tailor` | Skip AI, use master_resume.json directly |
+| `build.bat -y` | Skip approval prompt, generate PDF immediately |
+| `build.bat --no-tailor -y` | Fast mode: no AI, no prompts |
+
+---
+
+## AI Tailoring (Gemini)
+
+By default, the builder calls Gemini API to tailor your resume content:
+
+1. Rewrites bullet points to match job description keywords
+2. Makes slight adjustments to position titles
+3. Only uses keywords already in your master_resume.json (no fabrication)
+4. Saves tailored content to `data/temp_resume.json` for review
+
+### Setup
+
+Create a `.env` file in the project root:
+```
+GEMINI_API_KEY=your_api_key_here
+```
+
+### Install Dependencies
+
+```bash
+pip install google-genai jinja2
+```
 
 ---
 

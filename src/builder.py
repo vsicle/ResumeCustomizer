@@ -2,16 +2,17 @@
 Main builder script for generating tailored resumes.
 """
 
+import argparse
 import json
 import re
 import subprocess
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
 from scorer import select_content
+from tailor import tailor_resume, save_temp_resume, suggest_skills, prompt_for_skills, add_skills_to_resume
 
 
 # Month name to number mapping
@@ -164,25 +165,18 @@ def create_jinja_env(template_dir: Path) -> Environment:
     return env
 
 
-def build_resume(master_path: Path, jd_path: Path, output_dir: Path) -> Path:
+def render_pdf(master_data: dict, jd_text: str, output_dir: Path) -> Path:
     """
-    Build a tailored resume PDF.
+    Render resume PDF from data.
     
     Args:
-        master_path: Path to master_resume.json
-        jd_path: Path to job_description.txt
+        master_data: Resume data dictionary
+        jd_text: Job description text
         output_dir: Directory for output files
     
     Returns:
         Path to the generated PDF
     """
-    # Load data
-    with open(master_path, 'r', encoding='utf-8') as f:
-        master_data = json.load(f)
-    
-    with open(jd_path, 'r', encoding='utf-8') as f:
-        jd_text = f.read()
-    
     # Score and rank content
     ranked = select_content(master_data, jd_text)
     
@@ -244,10 +238,20 @@ def build_resume(master_path: Path, jd_path: Path, output_dir: Path) -> Path:
 
 def main():
     """Main entry point."""
+    parser = argparse.ArgumentParser(description='Build a tailored resume PDF')
+    parser.add_argument('--no-tailor', action='store_true', 
+                        help='Skip AI tailoring and use master_resume.json directly')
+    parser.add_argument('--yes', '-y', action='store_true',
+                        help='Skip approval prompt and generate PDF automatically')
+    parser.add_argument('--context', '-c', type=str, default='',
+                        help='Additional context for the AI (e.g., "emphasize backend experience")')
+    args = parser.parse_args()
+    
     root = Path(__file__).parent.parent
     
     master_path = root / 'data' / 'master_resume.json'
     jd_path = root / 'data' / 'job_description.txt'
+    temp_path = root / 'data' / 'temp_resume.json'
     output_dir = root / 'output'
     
     if not master_path.exists():
@@ -258,7 +262,71 @@ def main():
         print(f"Error: {jd_path} not found", file=sys.stderr)
         sys.exit(1)
     
-    build_resume(master_path, jd_path, output_dir)
+    # Load data
+    with open(master_path, 'r', encoding='utf-8') as f:
+        master_data = json.load(f)
+    
+    with open(jd_path, 'r', encoding='utf-8') as f:
+        jd_text = f.read()
+    
+    # Decide which data to use
+    if args.no_tailor:
+        print("Skipping AI tailoring (--no-tailor flag set)")
+        resume_data = master_data
+    else:
+        # Suggest skills from JD that user might have
+        working_data = master_data
+        if not args.yes:
+            try:
+                print("Analyzing JD for skill suggestions...")
+                suggested = suggest_skills(master_data, jd_text)
+                confirmed = prompt_for_skills(suggested)
+                working_data = add_skills_to_resume(master_data, confirmed)
+            except Exception as e:
+                print(f"Skill suggestion failed: {e}", file=sys.stderr)
+        
+        # Prompt for additional context if not provided via CLI
+        user_context = args.context
+        if not user_context and not args.yes:
+            print("\n" + "="*60)
+            print("OPTIONAL: Provide additional context for the AI")
+            print("(e.g., 'emphasize backend experience', 'highlight leadership')")
+            print("Press Enter to skip.")
+            print("="*60)
+            user_context = input("Context: ").strip()
+        
+        # Call Gemini to tailor the resume
+        try:
+            tailored_data = tailor_resume(working_data, jd_text, user_context)
+            save_temp_resume(tailored_data, temp_path)
+            resume_data = tailored_data
+        except Exception as e:
+            print(f"AI tailoring failed: {e}", file=sys.stderr)
+            print("Falling back to master_resume.json")
+            resume_data = master_data
+    
+    # Ask for approval before generating PDF
+    if not args.yes:
+        print("\n" + "="*60)
+        print("REVIEW: Tailored resume saved to data/temp_resume.json")
+        print("You can open and review it before generating the PDF.")
+        print("="*60)
+        
+        while True:
+            response = input("\nGenerate PDF? [y]es / [n]o / [r]eview temp_resume.json: ").strip().lower()
+            if response in ('y', 'yes'):
+                break
+            elif response in ('n', 'no'):
+                print("Aborted. No PDF generated.")
+                sys.exit(0)
+            elif response in ('r', 'review'):
+                print(f"\nOpen this file to review: {temp_path}")
+                input("Press Enter when ready to continue...")
+            else:
+                print("Please enter 'y', 'n', or 'r'")
+    
+    # Generate PDF
+    render_pdf(resume_data, jd_text, output_dir)
 
 
 if __name__ == '__main__':
