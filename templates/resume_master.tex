@@ -13,13 +13,17 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{titlesec}
+\usepackage{xcolor}
+
+% Define dark blue color for section headers
+\definecolor{sectionblue}{RGB}{0,51,102}
 
 % Remove page numbers
 \pagestyle{empty}
 
-% Compact section formatting
-\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
-\titlespacing{\section}{0pt}{6pt}{4pt}
+% Section formatting: small caps, bold, dark blue, with underline
+\titleformat{\section}{\large\bfseries\scshape\color{sectionblue}}{}{0em}{}[\color{sectionblue}\titlerule]
+\titlespacing{\section}{0pt}{8pt}{4pt}
 
 \begin{document}
 
@@ -27,59 +31,54 @@
 % HEADER
 % ==============================================================================
 \begin{center}
-    {\Huge \textbf{\VAR{basics.name | e}}}\\[4pt]
-    {\small \VAR{basics.email | e} | \VAR{basics.phone | e} | \VAR{basics.location | e}\BLOCK{if basics.website} | \href{https://\VAR{basics.website}}{\VAR{basics.website | e}}\BLOCK{endif}\BLOCK{if basics.github} | \href{https://\VAR{basics.github}}{GitHub}\BLOCK{endif}}
+    {\LARGE \textbf{\VAR{basics.name | e}}}\\[2pt]
+    {\small \href{https://\VAR{basics.website}}{\VAR{basics.website | e}} $\bullet$ \VAR{basics.phone | e} $\bullet$ \VAR{basics.email | e}\BLOCK{if basics.github} $\bullet$ \href{https://\VAR{basics.github}}{\VAR{basics.github | e}}\BLOCK{endif}}
 \end{center}
 
-\vspace{-8pt}
+\vspace{-6pt}
 
 % ==============================================================================
 % EDUCATION
 % ==============================================================================
 \section*{Education}
-\noindent \textbf{\VAR{basics.education.institution | e}} \hfill \VAR{basics.location | e}\\
-\noindent \VAR{basics.education.area | e}\BLOCK{if basics.education.score} | \VAR{basics.education.score | e}\BLOCK{endif} \hfill \VAR{basics.education.endDate | e}\\
-\BLOCK{if basics.education.courses}
-\noindent {\small \textit{Relevant Courses:} \VAR{basics.education.courses | map(attribute='name') | map('e') | join(', ')}}
-\BLOCK{endif}
+\noindent \textbf{\VAR{basics.education.institution | e}} \textit{\VAR{basics.education.area | e}}\BLOCK{if basics.education.score} $\bullet$ \VAR{basics.education.score | e}\BLOCK{endif} \hfill \textit{\VAR{basics.education.endDate | e}}
 
 % ==============================================================================
-% SKILLS
+% TECHNICAL SKILLS
 % ==============================================================================
-\section*{Skills}
-\noindent{\small
-\BLOCK{if skills.languages}\textbf{Languages:} \VAR{skills.languages | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
-\BLOCK{if skills.tools}\textbf{Tools:} \VAR{skills.tools | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
-\BLOCK{if skills.concepts}\textbf{Concepts:} \VAR{skills.concepts | map('e') | join(', ')}\\[2pt]\BLOCK{endif}
-\BLOCK{if skills.frameworks}\textbf{Frameworks:} \VAR{skills.frameworks | map('e') | join(', ')}\BLOCK{endif}
-}
+\section*{Technical Skills}
+\noindent
+\BLOCK{if skills.languages}Languages: \VAR{skills.languages | map('e') | join(', ')}\\[1pt]\BLOCK{endif}
+\BLOCK{if skills.frameworks}Frameworks/Libraries: \VAR{skills.frameworks | map('e') | join(', ')}\\[1pt]\BLOCK{endif}
+\BLOCK{if skills.tools}Tools \& Platforms: \VAR{skills.tools | map('e') | join(', ')}\\[1pt]\BLOCK{endif}
+\BLOCK{if skills.concepts}Concepts: \VAR{skills.concepts | map('e') | join(', ')}\BLOCK{endif}
 
 % ==============================================================================
-% EXPERIENCE
+% PROFESSIONAL EXPERIENCE
 % ==============================================================================
-\section*{Experience}
+\section*{Professional Experience}
 \BLOCK{for job in selected_work}
-\noindent \textbf{\VAR{job.position | e}} | \VAR{job.name | e} \hfill \VAR{job.startDate | e} -- \VAR{job.endDate | e}
-\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.5em]
+\noindent \textbf{\VAR{job.position | e}, \VAR{job.name | e}} \hfill \textit{\VAR{job.startDate | e} -- \VAR{job.endDate | e}}
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]
 \BLOCK{for bullet in job.highlights}
     \item \VAR{bullet | e}
 \BLOCK{endfor}
 \end{itemize}
-\BLOCK{if not loop.last}\vspace{2pt}\BLOCK{endif}
+\BLOCK{if not loop.last}\vspace{4pt}\BLOCK{endif}
 \BLOCK{endfor}
 
 % ==============================================================================
-% PROJECTS
+% PROJECTS & DEVELOPMENT EXPERIENCE
 % ==============================================================================
-\section*{Projects}
+\section*{Projects \& Development Experience}
 \BLOCK{for project in selected_projects}
-\noindent \textbf{\VAR{project.name | e}} \hfill \VAR{project.startDate | e}\BLOCK{if project.endDate} -- \VAR{project.endDate | e}\BLOCK{endif}
-\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.5em]
+\noindent \textbf{\VAR{project.name | e}} \hfill \textit{\VAR{project.startDate | e}\BLOCK{if project.endDate and project.endDate != project.startDate} -- \VAR{project.endDate | e}\BLOCK{endif}}
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]
 \BLOCK{for bullet in project.highlights}
     \item \VAR{bullet | e}
 \BLOCK{endfor}
 \end{itemize}
-\BLOCK{if not loop.last}\vspace{2pt}\BLOCK{endif}
+\BLOCK{if not loop.last}\vspace{4pt}\BLOCK{endif}
 \BLOCK{endfor}
 
 \end{document}

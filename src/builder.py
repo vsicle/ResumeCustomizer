@@ -3,13 +3,64 @@ Main builder script for generating tailored resumes.
 """
 
 import json
+import re
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
 from scorer import select_content
+
+
+# Month name to number mapping
+MONTHS = {
+    'january': 1, 'february': 2, 'march': 3, 'april': 4,
+    'may': 5, 'june': 6, 'july': 7, 'august': 8,
+    'september': 9, 'october': 10, 'november': 11, 'december': 12
+}
+
+
+def parse_date(date_str: str) -> tuple[int, int]:
+    """
+    Parse date string to (year, month) tuple for sorting.
+    Returns (9999, 12) for 'Present' to sort it first.
+    """
+    if not date_str:
+        return (0, 0)
+    
+    date_lower = date_str.lower().strip()
+    
+    if 'present' in date_lower or 'current' in date_lower:
+        return (9999, 12)
+    
+    # Try to extract year
+    year_match = re.search(r'(\d{4})', date_str)
+    year = int(year_match.group(1)) if year_match else 0
+    
+    # Try to extract month
+    month = 0
+    for month_name, month_num in MONTHS.items():
+        if month_name in date_lower:
+            month = month_num
+            break
+    
+    # Check for "Expected" prefix (future date)
+    if 'expected' in date_lower:
+        return (year + 1, month)  # Boost future dates
+    
+    return (year, month)
+
+
+def sort_by_date(items: list[dict]) -> list[dict]:
+    """Sort items by date, most recent first."""
+    def get_sort_key(item):
+        # Use endDate if available, otherwise startDate
+        end_date = item.get('endDate', item.get('startDate', ''))
+        return parse_date(end_date)
+    
+    return sorted(items, key=get_sort_key, reverse=True)
 
 
 # Space budget constants
@@ -64,8 +115,8 @@ def apply_space_budget(
                 lines_used += item_lines
     
     return {
-        'selected_work': selected_work,
-        'selected_projects': selected_projects,
+        'selected_work': sort_by_date(selected_work),
+        'selected_projects': sort_by_date(selected_projects),
         'selected_achievements': selected_achievements,
         'lines_used': lines_used
     }
