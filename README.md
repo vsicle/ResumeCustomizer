@@ -187,7 +187,3 @@ Ensure `.env` exists with `GEMINI_API_KEY=your_key`.
 
 **Resume exceeds one page**  
 The AI aims for exactly one page. If overflow occurs, reduce content in `master_resume.json` or adjust the LaTeX template margins.
-
-## License
-
-MIT
