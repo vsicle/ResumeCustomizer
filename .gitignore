@@ -8,6 +8,7 @@ output/
 
 # Personal data (never track sensitive resume info)
 data/master_resume.json
+data/job_description.txt
 temp_resume.json
 *.pdf
 

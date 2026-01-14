@@ -1,0 +1,30 @@
+About Us
+
+Acme Corp is building next-generation developer tools. We're a small team backed by top-tier investors who believe in shipping fast and learning faster.
+
+About The Role
+
+We're looking for a Software Engineer to join our core platform team. You'll work on real features, contribute to architecture decisions, and help shape the product roadmap.
+
+What You'll Do
+
+- Build and ship features for our core developer platform
+- Design and implement scalable backend services
+- Create intuitive interfaces for complex workflows
+- Write clean, maintainable code across the full stack
+- Collaborate with customers to turn feedback into shipped features
+
+What We're Looking For
+
+- Bachelor's or Master's in CS, Software Engineering, or related field
+- Experience with modern web technologies (TypeScript, React, Node.js)
+- Familiarity with databases (PostgreSQL, Redis)
+- Strong problem-solving skills and attention to detail
+- Ability to work independently and take ownership of projects
+
+Bonus Points
+
+- Experience with cloud infrastructure (AWS, GCP, Azure)
+- Contributions to open source projects
+- Experience with CI/CD pipelines and DevOps practices
+- Interest in developer experience and tooling
