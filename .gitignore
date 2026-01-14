@@ -1,5 +1,6 @@
 # Environment and secrets
 .env
+AGENTS.md
 config.json
 !.env.example
 
