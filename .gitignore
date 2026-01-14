@@ -3,9 +3,13 @@
 config.json
 !.env.example
 
-# Output files
+# Output files (never track generated content)
 output/
+
+# Personal data (never track sensitive resume info)
+data/master_resume.json
 temp_resume.json
+*.pdf
 
 # Python
 __pycache__/
