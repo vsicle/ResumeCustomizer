@@ -27,6 +27,7 @@ env/
 .idea/
 *.swp
 *.swo
+AGENTS.md
 
 # OS
 .DS_Store
