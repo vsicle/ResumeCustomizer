@@ -1,0 +1,134 @@
+{
+  "basics": {
+    "name": "YOUR FULL NAME",
+    "email": "your.email@example.com",
+    "phone": "(555) 123-4567",
+    "website": "yourwebsite.com",
+    "github": "github.com/yourusername",
+    "location": "City, State",
+    "education": {
+      "institution": "University Name",
+      "area": "Bachelor of Science in Computer Science",
+      "endDate": "Expected May 2026",
+      "score": "GPA: 3.8/4.0",
+      "highlights": [
+        "Dean's List, Relevant honors or achievements"
+      ],
+      "courses": [
+        {
+          "name": "CS101 Data Structures",
+          "details": "Implemented trees, graphs, hash tables in Java."
+        }
+      ]
+    }
+  },
+  "skills": {
+    "languages": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "Java",
+      "C++"
+    ],
+    "frameworks": [
+      "React",
+      "Node.js",
+      "Django",
+      "FastAPI"
+    ],
+    "tools": [
+      "Git/GitHub",
+      "Docker",
+      "AWS",
+      "Linux"
+    ],
+    "concepts": [
+      "REST APIs",
+      "CI/CD",
+      "Agile/Scrum",
+      "Database Design"
+    ]
+  },
+  "work": [
+    {
+      "name": "Company Name",
+      "position": "Software Engineering Intern",
+      "startDate": "June 2024",
+      "endDate": "Present",
+      "highlights": [
+        "Developed feature X using Python and React, reducing load time by 40%.",
+        "Collaborated with team of 5 engineers on microservices architecture.",
+        "Implemented automated testing pipeline with 90% code coverage.",
+        "Led code reviews and mentored 2 junior interns."
+      ],
+      "keywords": [
+        "Python",
+        "React",
+        "Microservices",
+        "Testing"
+      ]
+    },
+    {
+      "name": "Previous Company",
+      "position": "Junior Developer",
+      "startDate": "May 2023",
+      "endDate": "August 2023",
+      "highlights": [
+        "Built internal dashboard using Vue.js and Node.js.",
+        "Optimized database queries reducing response time by 60%.",
+        "Participated in daily standups and sprint planning."
+      ],
+      "keywords": [
+        "Vue.js",
+        "Node.js",
+        "SQL",
+        "Agile"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name",
+      "startDate": "2024",
+      "endDate": "2024",
+      "highlights": [
+        "Built a full-stack web application using React and FastAPI.",
+        "Implemented user authentication with JWT tokens.",
+        "Deployed to AWS using Docker containers.",
+        "Achieved 500+ users in first month of launch."
+      ],
+      "keywords": [
+        "React",
+        "FastAPI",
+        "AWS",
+        "Docker",
+        "JWT"
+      ]
+    },
+    {
+      "name": "Another Project",
+      "startDate": "2023",
+      "endDate": "2023",
+      "highlights": [
+        "Developed CLI tool in Python for automating data processing.",
+        "Reduced manual work by 10 hours per week for team.",
+        "Open-sourced with 50+ GitHub stars."
+      ],
+      "keywords": [
+        "Python",
+        "CLI",
+        "Automation"
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "name": "Hackathon Winner",
+      "summary": "1st place at University Hackathon 2024 for AI-powered accessibility tool."
+    },
+    {
+      "name": "Open Source Contributor",
+      "summary": "Contributed 10+ PRs to popular open source projects."
+    }
+  ]
+}
