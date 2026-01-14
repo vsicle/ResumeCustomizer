@@ -79,6 +79,7 @@ Create a targeted resume that fills exactly ONE PAGE. You must balance quantity 
 - Order all items by relevance (most relevant first)
 
 **TECHNICAL SKILLS TAILORING:**
+- NEVER add new skills that are not already in the input resume - only use skills from the master resume data
 - Reorder skills within each category to prioritize those mentioned in the JD
 - You may remove skills that are clearly irrelevant to the JD to reduce clutter
 - You may slightly rephrase skill names to match JD terminology (e.g., "Next.js" → "NextJS" if JD uses that form)
@@ -102,6 +103,7 @@ Create a targeted resume that fills exactly ONE PAGE. You must balance quantity 
 **INTEGRITY RULES (never break these):**
 - NEVER invent experiences, metrics, or technologies not implied by the original
 - NEVER claim proficiency in tools/languages not in the original resume
+- NEVER add skills from the JD that are not in the input resume's skills section
 - You may reframe HOW something is described, but not WHAT was done
 - Keep all dates, company names, and education details exactly as provided
 - For "keywords" arrays: ONLY use keywords from the ALLOWED KEYWORDS list
