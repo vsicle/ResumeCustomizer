@@ -8,22 +8,42 @@ import re
 from pathlib import Path
 
 
-def load_api_key() -> str:
-    """Load Gemini API key from .env file or environment."""
-    # Try environment variable first
-    api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
-    if api_key:
-        return api_key
+DEFAULT_MODEL = 'gemini-2.5-flash-lite'
+
+
+def load_env_config() -> dict:
+    """Load configuration from .env file or environment."""
+    config = {
+        'api_key': os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY'),
+        'model': os.environ.get('GEMINI_MODEL'),
+    }
     
-    # Try .env file
+    # Try .env file for missing values
     env_path = Path(__file__).parent.parent / '.env'
     if env_path.exists():
         with open(env_path, 'r') as f:
             for line in f:
-                if line.startswith('GEMINI_API_KEY='):
-                    return line.strip().split('=', 1)[1]
+                line = line.strip()
+                if line.startswith('GEMINI_API_KEY=') and not config['api_key']:
+                    config['api_key'] = line.split('=', 1)[1]
+                elif line.startswith('GEMINI_MODEL=') and not config['model']:
+                    config['model'] = line.split('=', 1)[1]
     
+    return config
+
+
+def load_api_key() -> str:
+    """Load Gemini API key from .env file or environment."""
+    config = load_env_config()
+    if config['api_key']:
+        return config['api_key']
     raise ValueError("No API key found. Set GEMINI_API_KEY in .env or environment.")
+
+
+def get_model() -> str:
+    """Get the configured model name, or default."""
+    config = load_env_config()
+    return config['model'] or DEFAULT_MODEL
 
 
 def extract_all_keywords(master_data: dict) -> list[str]:
@@ -80,10 +100,10 @@ Create a targeted resume that fills exactly ONE PAGE. You must balance quantity 
 
 **TECHNICAL SKILLS TAILORING:**
 - NEVER add new skills that are not already in the input resume - only use skills from the master resume data
-- Reorder skills within each category to prioritize those mentioned in the JD
-- You may remove skills that are clearly irrelevant to the JD to reduce clutter
+- REMOVE skills that are irrelevant or low-value for this specific JD (be aggressive about trimming)
+- REORDER skills within each category: place skills mentioned in the JD FIRST, then related/transferable skills, then general skills
 - You may slightly rephrase skill names to match JD terminology (e.g., "Next.js" → "NextJS" if JD uses that form)
-- Keep all skills provided in the input (user has confirmed they possess them)
+- The goal is a focused, high-signal skills section - quality over quantity
 
 **BULLET POINT REWRITING - WORK EXPERIENCE (be aggressive but truthful):**
 - Reframe each bullet to emphasize skills/technologies mentioned in the JD
@@ -120,7 +140,8 @@ def tailor_resume(master_data: dict, jd_text: str, user_context: str = "") -> di
     """Call Gemini API to tailor resume content."""
     from google import genai
     
-    print("Calling Gemini API to tailor resume...")
+    model_name = get_model()
+    print(f"Calling Gemini API ({model_name}) to tailor resume...")
     
     api_key = load_api_key()
     client = genai.Client(api_key=api_key)
@@ -128,7 +149,7 @@ def tailor_resume(master_data: dict, jd_text: str, user_context: str = "") -> di
     prompt = build_prompt(master_data, jd_text, user_context)
     
     response = client.models.generate_content(
-        model='gemini-2.5-flash-lite',
+        model=model_name,
         contents=prompt,
     )
     
@@ -180,7 +201,7 @@ Return ONLY the JSON array - no markdown, no explanation."""
     client = genai.Client(api_key=api_key)
     
     response = client.models.generate_content(
-        model='gemini-2.5-flash-lite',
+        model=get_model(),
         contents=prompt,
     )
     
