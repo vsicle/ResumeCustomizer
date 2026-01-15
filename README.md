@@ -134,13 +134,17 @@ python src/builder.py -y
 python src/builder.py --no-tailor
 ```
 
+### Quick Build (Paste JSON)
+For quick PDF generation without AI tailoring or JD matching:
+1. Paste your resume JSON into `data/paste_resume.json`
+2. Run `python src/quick_build.py`
+3. Output: `output/resume.pdf`
+
 ### VS Code
 Use the included launch configurations in `.vscode/launch.json`:
+- **Quick Build (paste JSON)** - Paste JSON, get PDF (no AI, no JD)
 - **Build Resume (with AI)** - Full interactive mode
-- **Build Resume (with context)** - Pre-set context for AI
-- **Build Resume (skip AI)** - Use master resume directly
-- **Build Resume (auto-approve)** - Skip all prompts
-- **Build Resume (fast mode)** - No AI, no prompts
+
 
 ## Output
 
@@ -176,6 +180,15 @@ Edit `templates/resume.tex` to change formatting, fonts, or layout.
 Edit prompts in `src/tailor.py`:
 - `build_prompt()` - Main tailoring instructions
 - `suggest_skills()` - Skill suggestion logic
+- `temperature` - Controls output consistency (default: 0.3, lower = more deterministic)
+
+### Change Gemini Model
+Set `GEMINI_MODEL` in `.env`:
+```
+GEMINI_MODEL=gemini-2.5-flash      # Default, good balance
+GEMINI_MODEL=gemini-2.5-pro        # Higher quality, slower
+GEMINI_MODEL=gemini-2.5-flash-lite # Fastest, less consistent
+```
 
 ## Troubleshooting
 
