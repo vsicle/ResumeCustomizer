@@ -21,6 +21,11 @@
 % Remove page numbers
 \pagestyle{empty}
 
+% Prevent ugly hyphenation and uneven word spacing
+\usepackage{ragged2e}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
 % Section formatting: small caps, bold, dark blue, with underline
 \titleformat{\section}{\large\bfseries\scshape\color{sectionblue}}{}{0em}{}[\color{sectionblue}\titlerule]
 \titlespacing{\section}{0pt}{8pt}{4pt}
@@ -59,7 +64,7 @@
 \section*{Professional Experience}
 \BLOCK{for job in selected_work}
 \noindent \textbf{\VAR{job.position | e}, \VAR{job.name | e}} \hfill \textit{\VAR{job.startDate | e} -- \VAR{job.endDate | e}}
-\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]\RaggedRight
 \BLOCK{for bullet in job.highlights}
     \item \VAR{bullet | e}
 \BLOCK{endfor}
@@ -73,7 +78,7 @@
 \section*{Projects \& Development Experience}
 \BLOCK{for project in selected_projects}
 \noindent \textbf{\VAR{project.name | e}} \hfill \textit{\VAR{project.startDate | e}\BLOCK{if project.endDate and project.endDate != project.startDate} -- \VAR{project.endDate | e}\BLOCK{endif}}
-\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]
+\begin{itemize}[noitemsep, topsep=2pt, leftmargin=1.2em, label=$\bullet$]\RaggedRight
 \BLOCK{for bullet in project.highlights}
     \item \VAR{bullet | e}
 \BLOCK{endfor}
